@@ -1,5 +1,7 @@
 import random
 
+#THIS FILE IS OBSOLETE NOW, DONT USE
+
 def handle_response(message):
     p_message = message.lower()
 

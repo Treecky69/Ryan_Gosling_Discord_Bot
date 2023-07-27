@@ -1,38 +1,51 @@
 import discord
-import responses
-
-async def send_message(message, user_message):
-    try:
-        response = responses.handle_response(user_message)
-        #print(f"This is the response variable {response}")
-        await message.channel.send(response)
-    except Exception as e:
-        print(f"This is an exception {e}")
+from discord.ext import commands
+import chat_exporter
+import io
+import datetime
 
 def run_discord_bot():
     token = "MTEzMzcxNDM5MDUxMjgzMjUxMg.G0fhSl.qa4OWiugWQgnEe5-0I8vVcShIznmzxHdzi_Xng"
     intents = discord.Intents.all()
+    intents.members = True
     intents.message_content = True
-    client = discord.Client(intents=intents)
+    #client = discord.Client(intents=intents)
 
-    @client.event
+    bot = commands.Bot(command_prefix="+", intents=intents)
+
+    #what is printed in the shell when turned on
+    @bot.event
     async def on_ready():
-        print(f"{client.user} is now running")
+        print(f"{bot.user} is now running")
 
-    @client.event
-    async def on_message(message):
-        if message.author == client.user:
+    @bot.command()
+    async def hello(ctx):
+        await ctx.send("Hi there")
+
+    @bot.command()
+    async def save(ctx: commands.Context, tz_info: str = "CET", fancy_times: bool = False):
+        await ctx.send("Getting history ready") #message
+        date = str(datetime.date.today())
+
+        print("Before transcript") #generating chat
+        transcript = await chat_exporter.export(
+            ctx.channel,
+            tz_info=tz_info,
+            fancy_times=fancy_times,
+            bot=bot
+        )
+
+        print("Before if")
+        if transcript is None:
             return
 
-        username = str(message.author)
-        user_message = str(message.content)
-        channel = str(message.channel)
+        print("Before file") #generating file
+        transcript_file = discord.File(
+            io.BytesIO(transcript.encode()),
+            filename=f"chat-history-{ctx.channel}_{date}.html"
+        )
 
-        print(f'{username} said: {user_message}" ({channel})')
+        await ctx.send(file=transcript_file)
+        print("done")
 
-        if user_message[0] == "?":
-            user_message = user_message[1:]
-            #print(f"MESSAGE RECIEVED: {user_message}")
-            await send_message(message, user_message)
-
-    client.run(token)
+    bot.run(token)
