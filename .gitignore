@@ -2,3 +2,5 @@
 /venv/*
 info.txt
 github_token.txt
+/cogs/__pycache__/*
+*.log
