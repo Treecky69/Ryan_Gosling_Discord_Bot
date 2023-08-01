@@ -9,7 +9,7 @@ class basic_commands(commands.Cog):
     @commands.command()
     @commands.Cog.listener()
     async def hello(self, ctx):
-        await ctx.send("Hi there")
+        await ctx.send(f"Hi there {ctx.author.mention}")
     
     @commands.command()
     async def test(self, ctx):
