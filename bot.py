@@ -4,7 +4,7 @@ import os
 import asyncio
 import logging
 import sys
-import traceback
+from cogs.save_commands import save_commands
 
 #since with the line bot.start(token) errors are no longer outputed
 #i use this
@@ -26,6 +26,8 @@ def run_discord_bot():
 
     bot = commands.Bot(command_prefix="+", intents=intents)
 
+    save = save_commands(bot)
+
     #idk stole it from here
     #https://stackoverflow.com/questions/72732135/no-errors-outputing-after-i-started-using-cogs-in-discord-py-2-0
     async def load_extensions():
@@ -43,13 +45,14 @@ def run_discord_bot():
     @bot.event
     async def on_ready():
         print(f"{bot.user} is now running")
+        await save.run_times()
 
     #this needs some work
     #this is for error handling
     #https://stackoverflow.com/questions/42680781/handling-errors-with-the-discord-api-on-error
     @bot.event
-    async def on_error(ctx):
+    async def on_error(ctx: commands.Context):
         await ctx.send("Yo bitch, there is an error")
-        print(traceback.format_exc())
+        #print(traceback.format_exc())
 
     asyncio.run(main())
