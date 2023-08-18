@@ -18,8 +18,18 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 root.addHandler(handler)
 
+textfile = "info.txt"
+
+with open(textfile) as f:
+    lines = f.readlines()
+
+for line in lines:
+    if "token = " in line:
+        var, token = line.split(" = ")
+        token = token[:-1] #remove \n for newline
+        break
+
 def run_discord_bot():
-    token = "MTEzMzcxNDM5MDUxMjgzMjUxMg.G0fhSl.qa4OWiugWQgnEe5-0I8vVcShIznmzxHdzi_Xng"
     intents = discord.Intents.all()
     intents.members = True
     intents.message_content = True

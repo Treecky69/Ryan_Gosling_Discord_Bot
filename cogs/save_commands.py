@@ -168,8 +168,8 @@ class save_commands(commands.Cog):
 
         if day == None: 
             await ctx.send("Please provide an argument. For more info, type `+help`")
-        elif day not in weekday_list:
-            await ctx.send("Not a valid argument. Pick a day between monday and sunday")
+        elif day not in weekday_list or hour < 0 or hour > 23 or minute < 0 or minute > 59:
+            await ctx.send("Not a valid argument. Pick a day between monday and sunday or check your time")
         else:
             day = weekday_list[day]
             await ctx.send("Got it boss. Scheduled a weekly save")
@@ -187,12 +187,12 @@ class save_commands(commands.Cog):
 
         if day == None: #no arg
             await ctx.send("Please provide an argument. For more info, type `+help`")
-        elif day > 31: #more than 31
-            await ctx.send("Not a valid argument. Pick a date between 1 and 31")
+        elif day > 31 or day < 1 or hour < 0 or hour > 23 or minute < 0 or minute > 59: #more than 31
+            await ctx.send("Not a valid argument. Pick a date between 1 and 31 or check your time")
         else:
             if day > num_days:
                 day = num_days
-                await ctx.send(f"Today is day {day}")
+                #await ctx.send(f"Today is day {day}")
 
             await ctx.send("Got it boss. Scheduled a monthly save")
             self.schedule("month", day, hour, minute, ctx.channel.id)
