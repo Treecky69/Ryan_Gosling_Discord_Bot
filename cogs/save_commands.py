@@ -28,7 +28,7 @@ class save_commands(commands.Cog):
         while True:
             day_week = datetime.today().weekday() + 1
             day_month = datetime.now(timezone).day
-            hour = datetime.now().hour
+            hour = datetime.now(timezone).hour
             smallest_rem = 1000 #smallest number remaining minutes
             #until next scheduled time
             channel_list = []
