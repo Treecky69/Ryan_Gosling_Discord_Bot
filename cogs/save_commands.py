@@ -9,6 +9,7 @@ import pytz
 import sqlite3
 
 database = "times.db"
+timezone = pytz.timezone('Europe/Amsterdam')
 
 conn = sqlite3.connect(database)
 conn.row_factory = sqlite3.Row
@@ -24,7 +25,6 @@ class save_commands(commands.Cog):
         conn.commit()
 
     async def run_times(self):
-        timezone = pytz.timezone('Europe/Amsterdam')
         while True:
             day_week = datetime.today().weekday() + 1
             day_month = datetime.now(timezone).day
@@ -111,7 +111,7 @@ class save_commands(commands.Cog):
     async def save_func(self, channel_id, onlythis = False, tz_info = "CET", fancy_times = False):
         ctx = self.bot.get_channel(channel_id)
         await ctx.send("Getting history ready") #message
-        date = datetime.now() #getting date
+        date = datetime.now(timezone) #getting date
         date_str = date.strftime("%Y.%m.%d-T%H%M")
 
         #channel from ctx.channel is same datatype as ctx.guild.text_channels
@@ -177,8 +177,8 @@ class save_commands(commands.Cog):
 
     @save.command(brief = "schedule a monthly save", description = "Format: +save month <monthday> <hour> <minute>")
     async def month(self, ctx, day: int = commands.parameter(default=None, description="month day (1-31)"), hour: int = commands.parameter(default=12, description="Hour, this uses 24-hour format"), minute: int = 0):
-        year = datetime.now().year
-        month = datetime.now().month
+        year = datetime.now(timezone).year
+        month = datetime.now(timezone).month
 
         #number of days in the month
         #[1] is there because this gives 2 args

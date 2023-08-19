@@ -48,9 +48,9 @@ class basic_commands(commands.Cog):
         #await ctx.send(message)
         
 
-    @commands.command(brief = "Surprise ;)", description = "Enter the voice channel for a surpirse :)")
-    async def surprise(self, ctx):
-        await ctx.send("This is surprise")
+    # @commands.command(brief = "Surprise ;)", description = "Enter the voice channel for a surpirse :)")
+    # async def surprise(self, ctx):
+    #     await ctx.send("!play https://www.youtube.com/watch?v=MV_3Dpw-BRY")
 
 async def setup(bot):
     await bot.add_cog(basic_commands(bot))
