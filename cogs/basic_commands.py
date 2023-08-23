@@ -1,4 +1,6 @@
+import discord
 from discord.ext import commands
+import random
 
 class basic_commands(commands.Cog):
     def __init__(self, bot):
@@ -6,10 +8,18 @@ class basic_commands(commands.Cog):
 
     #says hello
 
-    @commands.command(brief = "This is brief", description = "This is an example description")
+    @commands.command(brief = "Just saying hello", description = "This is an example description")
     @commands.Cog.listener()
     async def hello(self, ctx):
+        #URL endings of gifs
+        giflist = ["ryan-gosling-gif-24496241", 
+        "ryan-gosling-gif-24496239", 
+        "drive-nightcall-film-ryan-gosling-gif-23819304", 
+        "ryan-gosling-drive2011-ryan-gosling-drive-sigma-sigma-male-gif-23598924"]
+
+        rand = random.randrange(0, len(giflist))
         await ctx.send(f"Hi there {ctx.author.mention}")
+        await ctx.send(f"https://tenor.com/view/{giflist[rand]}")
     
     # @commands.command(brief = "This is brief test")
     # async def test(self, ctx, channel_name = None, server_name = None):
@@ -51,6 +61,26 @@ class basic_commands(commands.Cog):
     # @commands.command(brief = "Surprise ;)", description = "Enter the voice channel for a surpirse :)")
     # async def surprise(self, ctx):
     #     await ctx.send("!play https://www.youtube.com/watch?v=MV_3Dpw-BRY")
+
+    @commands.command(brief="My introduction", description = "I introduce myself lmao")
+    async def introduction(self, ctx):
+        user = discord.utils.get(ctx.guild.members, name="_kalimero")
+        for member in ctx.guild.members:
+            if member.name == "_kalimero":
+                user = member
+                break
+        else:
+            return
+
+        message = f"""For commands type '+help'
+
+Hey guys, this is Ryan Gosling. After the Barbie success, I can finally afford a house in Gorno Dupeni. Big Skopje Sinkpissers Supporter
+
+Sponsored by Viva. Природно, си е природно.
+
+Profile pic by {user.mention}"""
+        
+        await ctx.send(message)
 
 async def setup(bot):
     await bot.add_cog(basic_commands(bot))

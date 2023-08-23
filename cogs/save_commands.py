@@ -239,5 +239,7 @@ class save_commands(commands.Cog):
         cur.execute("delete from times where id = ?", [ID])
         conn.commit()
 
+        await ctx.send("Time removed")
+
 async def setup(bot):
     await bot.add_cog(save_commands(bot))
