@@ -29,7 +29,8 @@ class save_commands(commands.Cog):
             day_week = datetime.today().weekday() + 1
             day_month = datetime.now(timezone).day
             hour = datetime.now(timezone).hour
-            smallest_rem = 1000 #smallest number remaining minutes
+            minute = datetime.now().minute
+            smallest_rem = None #smallest number remaining minutes
             #until next scheduled time
             channel_list = []
 
@@ -53,8 +54,6 @@ class save_commands(commands.Cog):
             month_list = cur.fetchall()
 
             for row in week_list:
-                minute = datetime.now().minute #because the saving process may take a long time
-
                 if day_week == row["day"]:
                     week_bool["day"] = True
                     if hour == row["hour"]:
@@ -66,12 +65,10 @@ class save_commands(commands.Cog):
                         else:
                             if row["minute"] > minute:
                                 rem = row["minute"] - minute
-                                if rem < smallest_rem:
+                                if rem < smallest_rem or smallest_rem == None:
                                     smallest_rem = rem
 
             for row in month_list:
-                minute = datetime.now().minute #because the saving process may take a long time
-
                 if day_month == row["day"]:
                     month_bool["day"] = True
                     if hour == row["hour"]:
@@ -83,17 +80,20 @@ class save_commands(commands.Cog):
                         else:
                             if row["minute"] > minute:
                                 rem = row["minute"] - minute
-                                if rem < smallest_rem:
+                                if rem < smallest_rem or smallest_rem == None:
                                     smallest_rem = rem
 
             for channel in channel_list:
                 await self.save_func(channel)
 
             if week_bool["day"] or month_bool["day"]:
-                if week_bool["hour"] or month_bool["hour"]:
+                if (week_bool["hour"] or month_bool["hour"]) and smallest_rem != None:
                     #here there is no if statement for minutes
                     #because if it comes to this block of code
                     #that means that not all 3 booleans are true
+
+                    #changing the smallest_rem after the save process(it can sometimes take minutes)
+                    smallest_rem -= (datetime.now().minute - minute) 
                     await sleep(smallest_rem * 60)
                 else:
                     #remaining minute till next hour

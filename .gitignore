@@ -5,3 +5,4 @@ github_token.txt
 /cogs/__pycache__/*
 *.log
 *.db
+/cogs/music_commands.py
