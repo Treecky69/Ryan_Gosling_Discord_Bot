@@ -6,3 +6,6 @@ github_token.txt
 *.log
 *.db
 /cogs/music_commands.py
+/dropbox_funcs/__pycache__/*
+/dropbox_funcs/dropbox_auth.py
+dropbox_auth.py

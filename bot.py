@@ -60,9 +60,9 @@ def run_discord_bot():
     #this needs some work
     #this is for error handling
     #https://stackoverflow.com/questions/42680781/handling-errors-with-the-discord-api-on-error
-    @bot.event
-    async def on_error(ctx: commands.Context):
-        await ctx.send("Yo bitch, there is an error")
+    #@bot.event
+    #async def on_error(ctx: commands.Context):
+    #    await ctx.send("Yo bitch, there is an error")
         #print(traceback.format_exc())
 
     asyncio.run(main())
