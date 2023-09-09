@@ -51,7 +51,17 @@ def dropbox_upload(cloudlist, servername, date):
     path = f"/{servername}/{date}/"
 
     for file in cloudlist:
-        filename = f"chat-history-{servername}-{file['channel']}-{date}.html"
+        temp = [x for x in file["channel"].split("-")] #temp array for split words
+        channel_name = "" #channel name after filtering
+
+        for word in temp:
+            if word.isalnum():
+                if channel_name == "":
+                    channel_name += word
+                else:
+                    channel_name += f"-{word}"
+
+        filename = f"chat-history-{servername}-{channel_name}-{date}.html"
         filepath = path + filename
 
         #this encodes in binary utf-8
