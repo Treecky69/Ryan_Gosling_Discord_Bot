@@ -12,11 +12,20 @@ from cogs.save_commands import save_commands
 root = logging.getLogger()
 root.setLevel(logging.DEBUG)
 
+#log to console
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
+
+#log to file main.log
+file = logging.FileHandler("main.log")
+file.setLevel(logging.DEBUG)
+file.setFormatter(formatter)
+
+#adding them to the root logger
 root.addHandler(handler)
+root.addHandler(file)
 
 textfile = "info.txt"
 
