@@ -5,6 +5,8 @@ import asyncio
 import logging
 import sys
 from cogs.save_commands import save_commands
+import subprocess
+import traceback
 
 #since with the line bot.start(token) errors are no longer outputed
 #i use this
@@ -63,15 +65,31 @@ def run_discord_bot():
     #what is printed in the shell when turned on
     @bot.event
     async def on_ready():
-        print(f"{bot.user} is now running")
+        ctx = bot.get_channel(1161352691440693279) #start-alert channel
+
+        #command to get all PIDs of all instances of main.py
+        process = subprocess.Popen(["pgrep", "-f", "main.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        #communicate is for getting the output
+        #decode is for decoding it from binary to ascii
+        out,err = process.communicate()
+        out = out.decode('ascii')
+        count = out.count('\n') #count how many instances
+
+        #uncomment this in hosting code
+        #if count > 1:
+        #    await ctx.send("A new instance has spawned. Remember that the times are in UTC which are -2 from yours")
+        #    quit()
+
+        await ctx.send(f"{bot.user} is now running")
         await save.run_times()
 
-    #this needs some work
-    #this is for error handling
+
     #https://stackoverflow.com/questions/42680781/handling-errors-with-the-discord-api-on-error
-    #@bot.event
-    #async def on_error(ctx: commands.Context):
-    #    await ctx.send("Yo bitch, there is an error")
-        #print(traceback.format_exc())
+    @bot.event
+    async def on_error():
+        ctx = bot.get_channel(1161372535229796536) #error-channel channel
+        await ctx.send("Yo bitch, there is an error")
+        await ctx.send(traceback.format_exc())
 
     asyncio.run(main())
