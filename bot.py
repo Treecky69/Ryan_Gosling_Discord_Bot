@@ -30,6 +30,7 @@ root.addHandler(handler)
 root.addHandler(file)
 
 textfile = "info.txt"
+running = False #boolean wether there is already an instance running
 
 with open(textfile) as f:
     lines = f.readlines()
@@ -66,28 +67,20 @@ def run_discord_bot():
     @bot.event
     async def on_ready():
         ctx = bot.get_channel(1161352691440693279) #start-alert channel
+        global running
 
-        #command to get all PIDs of all instances of main.py
-        process = subprocess.Popen(["pgrep", "-f", "main.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        #communicate is for getting the output
-        #decode is for decoding it from binary to ascii
-        out,err = process.communicate()
-        out = out.decode('ascii')
-        count = out.count('\n') #count how many instances
-
-        #uncomment this in hosting code
-        #if count > 1:
-        #    await ctx.send("A new instance has spawned. Remember that the times are in UTC which are -2 from yours")
-        #    quit()
-
-        await ctx.send(f"{bot.user} is now running")
-        await save.run_times()
-
+        if not running:
+            running = True
+            await ctx.send(f"{bot.user} is now running")
+            await ctx.send(f"Running is {running}")
+            await save.run_times()
+        else:
+            await ctx.send(f"A new instance was shutdown")
+            quit()
 
     #https://stackoverflow.com/questions/42680781/handling-errors-with-the-discord-api-on-error
     @bot.event
-    async def on_error():
+    async def on_error(event):
         ctx = bot.get_channel(1161372535229796536) #error-channel channel
         await ctx.send("Yo bitch, there is an error")
         await ctx.send(traceback.format_exc())

@@ -13,15 +13,15 @@ class basic_commands(commands.Cog):
     @commands.command(brief = "Just saying hello", description = "This is an example description")
     @commands.Cog.listener()
     async def hello(self, ctx):
-        #URL endings of gifs
-        giflist = ["ryan-gosling-gif-24496241", 
-        "ryan-gosling-gif-24496239", 
-        "drive-nightcall-film-ryan-gosling-gif-23819304", 
-        "ryan-gosling-drive2011-ryan-gosling-drive-sigma-sigma-male-gif-23598924"]
+        gifFile = "gifList.txt" #ryan gosling gif list
+
+        with open(gifFile) as f:
+            giflist = f.readlines() #list of links for the gifs
 
         rand = random.randrange(0, len(giflist))
+
         await ctx.send(f"Hi there {ctx.author.mention}")
-        await ctx.send(f"https://tenor.com/view/{giflist[rand]}")
+        await ctx.send(f"{giflist[rand]}")
     
     # @commands.command(brief = "This is brief test")
     # async def test(self, ctx, channel_name = None, server_name = None):
@@ -105,6 +105,17 @@ Sponsored by Viva. Природно, си е природно.
 Profile pic by {user.mention}"""
         
         await ctx.send(message)
+
+    @commands.command(brief="I answer question", description = "You ask questions and I answer them")
+    async def answer(self, ctx):
+        answerFile = "answerList.txt" #list of answers ryan can give
+
+        with open(answerFile) as f:
+            answerList = f.readlines() #list of answers
+
+        rand = random.randrange(0, len(answerList))
+
+        await ctx.send(f"{answerList[rand]}")
 
 async def setup(bot):
     await bot.add_cog(basic_commands(bot))
