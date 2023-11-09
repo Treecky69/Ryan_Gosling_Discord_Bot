@@ -72,7 +72,6 @@ def run_discord_bot():
         if not running:
             running = True
             await ctx.send(f"{bot.user} is now running")
-            await ctx.send(f"Running is {running}")
             await save.run_times()
         else:
             await ctx.send(f"A new instance was shutdown")

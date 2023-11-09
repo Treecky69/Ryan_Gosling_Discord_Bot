@@ -3,6 +3,7 @@ from discord.ext import commands
 import random
 import yt_dlp
 from asyncio import sleep
+import aiohttp
 
 class basic_commands(commands.Cog):
     def __init__(self, bot):
@@ -23,8 +24,8 @@ class basic_commands(commands.Cog):
         await ctx.send(f"Hi there {ctx.author.mention}")
         await ctx.send(f"{giflist[rand]}")
     
-    # @commands.command(brief = "This is brief test")
-    # async def test(self, ctx, channel_name = None, server_name = None):
+    #@commands.command(brief = "This is brief test")
+    #async def test(self, ctx, channel_name = None, server_name = None):
         # channel_id = ctx.channel.id
         # chnl = self.bot.get_channel(channel_id)
         # #await ctx.send(ctx.channel.id)
@@ -65,7 +66,7 @@ class basic_commands(commands.Cog):
         if ctx.author.voice is None:
             await ctx.send("JOIN A VC, NIGGA")
         voice_channel = ctx.author.voice.channel
-        if ctx.voice_client is None:
+        if ctx.voice_client is  None:
             await voice_channel.connect()
         else:
             await ctx.voice_client.move_to(voice_channel)
