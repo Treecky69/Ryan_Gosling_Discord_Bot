@@ -66,7 +66,7 @@ class basic_commands(commands.Cog):
         if ctx.author.voice is None:
             await ctx.send("JOIN A VC, NIGGA")
         voice_channel = ctx.author.voice.channel
-        if ctx.voice_client is  None:
+        if ctx.voice_client is None:
             await voice_channel.connect()
         else:
             await ctx.voice_client.move_to(voice_channel)
