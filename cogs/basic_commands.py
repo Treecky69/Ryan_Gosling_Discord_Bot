@@ -12,7 +12,7 @@ class basic_commands(commands.Cog):
     #says hello
 
     @commands.command(brief = "Just saying hello", description = "This is an example description")
-    @commands.Cog.listener()
+    #@commands.Cog.listener()
     async def hello(self, ctx):
         gifFile = "gifList.txt" #ryan gosling gif list
 

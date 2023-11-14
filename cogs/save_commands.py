@@ -181,7 +181,7 @@ class save_commands(commands.Cog):
 
     #chat html
     @commands.group(name="save", invoke_without_command=True, brief = "For archiving the current channel", description = "Group of subcommands used for archiving")
-    @commands.Cog.listener()
+    #@commands.Cog.listener()
     async def save(self, ctx: commands.Context):
         await self.save_func(ctx.channel.id, cloud = "no", onlythis = True)
 

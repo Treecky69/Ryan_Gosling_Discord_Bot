@@ -45,18 +45,27 @@ def run_discord_bot():
     intents = discord.Intents.all()
     intents.members = True
     intents.message_content = True
+    intents.reactions = True
 
     bot = commands.Bot(command_prefix="+", intents=intents)
 
     save = save_commands(bot)
+
+    async def reaction_func(reaction, user):
+        #if the bot reacts, do nothing
+        if user.bot:
+            return
+
+        ctx = reaction.message.channel
+        message = await ctx.send(f"idk man {reaction}, {user.name}")
 
     #idk stole it from here
     #https://stackoverflow.com/questions/72732135/no-errors-outputing-after-i-started-using-cogs-in-discord-py-2-0
     async def load_extensions():
         for filename in os.listdir("./cogs"):
             if filename.endswith(".py"):
-                 await bot.load_extension(f"cogs.{filename[:-3]}")
-                 print(f"{filename} loaded")
+                await bot.load_extension(f"cogs.{filename[:-3]}")
+                print(f"{filename} loaded")
 
     async def main():
         async with bot:
@@ -67,15 +76,24 @@ def run_discord_bot():
     @bot.event
     async def on_ready():
         ctx = bot.get_channel(1161352691440693279) #start-alert channel
-        global running
+        #global running
 
-        if not running:
-            running = True
-            await ctx.send(f"{bot.user} is now running")
-            await save.run_times()
-        else:
-            await ctx.send(f"A new instance was shutdown")
-            quit()
+        #if not running:
+            #running = True
+        await ctx.send(f"{bot.user} is now running")
+        await save.run_times()
+        #else:
+        #    await ctx.send(f"A new instance was shutdown")
+        #    quit()
+
+    @bot.event
+    async def on_reaction_add(reaction, user):
+        await reaction_func(reaction, user)
+
+    @bot.event
+    async def on_reaction_remove(reaction, user):
+        await reaction_func(reaction, user)
+        
 
     #https://stackoverflow.com/questions/42680781/handling-errors-with-the-discord-api-on-error
     @bot.event
