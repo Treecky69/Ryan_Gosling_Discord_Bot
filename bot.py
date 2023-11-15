@@ -7,6 +7,8 @@ import sys
 from cogs.save_commands import save_commands
 import subprocess
 import traceback
+import sqlite3
+from discord import FFmpegPCMAudio
 
 #since with the line bot.start(token) errors are no longer outputed
 #i use this
@@ -51,13 +53,37 @@ def run_discord_bot():
 
     save = save_commands(bot)
 
+    database = "sounds.db" #sound database
+
+    conn = sqlite3.connect(database)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+
+    #for when a reaction is added or removed
     async def reaction_func(reaction, user):
+        bot_id = 1133714390512832512 #ryan's discord id
+        ctx = reaction.message.channel
+        soundFolder = "/sounds/"
+
         #if the bot reacts, do nothing
         if user.bot:
             return
 
-        ctx = reaction.message.channel
-        message = await ctx.send(f"idk man {reaction}, {user.name}")
+        #if there are reactions to messages not sent from the bot
+        #ignore them
+        if reaction.message.author.id != bot_id:
+            return
+
+        cur.execute("select * from sound where emoji = ?", [reaction.emoji])
+        row = cur.fetchone()
+
+        file = soundFolder + row["file"]
+        await ctx.send(file)
+
+        #for playing audio files
+        #https://www.youtube.com/watch?v=M_6_GbDc39Q
+        #source = FFmpegPCMAudio("file")
+        #player = voice.play(source)
 
     #idk stole it from here
     #https://stackoverflow.com/questions/72732135/no-errors-outputing-after-i-started-using-cogs-in-discord-py-2-0

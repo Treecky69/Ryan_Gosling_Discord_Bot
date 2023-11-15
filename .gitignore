@@ -10,3 +10,4 @@ github_token.txt
 /dropbox_funcs/dropbox_auth.py
 dropbox_auth.py
 main.log
+/ignore/

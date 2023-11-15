@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import asyncio
 import sqlite3
-from discord import FFmpegPCMAudio
 
 database = "sounds.db"
 
@@ -14,7 +13,7 @@ class sound_commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(name="sound", invoke_without_command=True, brief="Goofy sounds", description="A feature to play all your favorite sounds")
+    @commands.command(brief="Goofy sounds", description="A feature to play all your favorite sounds")
     async def sound(self, ctx: commands.Context):
         cur.execute("select * from sound")
         rows = cur.fetchall()
@@ -22,16 +21,24 @@ class sound_commands(commands.Cog):
         message = await ctx.send("These are sounds")
         
         for row in rows:
-            print(row["emoji"])
             try:
-                await message.add_reaction(f"{row['emoji']}")
+                await message.add_reaction(row['emoji'])
             except:
                 continue
 
-        #for playing audio file
-        #https://www.youtube.com/watch?v=M_6_GbDc39Q
-        #source = FFmpegPCMAudio("file")
-        #player = voice.play(source)
+    @commands.command(brief="Join the VC", description="Tell the bot to join")
+    async def join(self,ctx):
+        if ctx.author.voice is None:
+            await ctx.send("JOIN A VC, NIGGA")
+        voice_channel = ctx.author.voice.channel
+        if ctx.voice_client is None:
+            await voice_channel.connect()
+        else:
+            await ctx.voice_client.move_to(voice_channel)
+
+    @commands.command(brief="Disconnect from VC", description="Tell the bot to get tf out of the VC")
+    async def disconnect(self, ctx):
+        await ctx.voice_client.disconnect()
 
 async def setup(bot):
     await bot.add_cog(sound_commands(bot))
