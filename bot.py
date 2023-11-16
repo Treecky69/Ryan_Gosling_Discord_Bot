@@ -63,7 +63,7 @@ def run_discord_bot():
     async def reaction_func(reaction, user):
         bot_id = 1133714390512832512 #ryan's discord id
         ctx = reaction.message.channel
-        soundFolder = "/sounds/"
+        soundFolder = os.getcwd() + "/sounds/" #getcwd for current dir
 
         #if the bot reacts, do nothing
         if user.bot:
@@ -78,12 +78,25 @@ def run_discord_bot():
         row = cur.fetchone()
 
         file = soundFolder + row["file"]
-        await ctx.send(file)
 
-        #for playing audio files
-        #https://www.youtube.com/watch?v=M_6_GbDc39Q
-        #source = FFmpegPCMAudio("file")
-        #player = voice.play(source)
+        if user.voice == None:
+            await ctx.send("JOIN VC NIGGA")
+        else:
+            #for playing audio files
+            #https://www.youtube.com/watch?v=M_6_GbDc39Q
+            channel = user.voice.channel
+
+            #bot's current voice channel
+            vc = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+
+            if vc is None:
+                vc = await channel.connect()
+            elif vc.channel != channel:
+                await ctx.send("Hey fag, we aren't in the same channels. Use the join command we can be in the same channel and I can moan in your ear.")
+
+            #playing the file
+            source = FFmpegPCMAudio(file)
+            player = vc.play(source)
 
     #idk stole it from here
     #https://stackoverflow.com/questions/72732135/no-errors-outputing-after-i-started-using-cogs-in-discord-py-2-0

@@ -18,7 +18,12 @@ class sound_commands(commands.Cog):
         cur.execute("select * from sound")
         rows = cur.fetchall()
 
-        message = await ctx.send("These are sounds")
+        text = "These are the sounds:\n"
+        
+        for row in rows:
+            text += f"- {row['emoji']}: {row['file']}\n"
+
+        message = await ctx.send(text)
         
         for row in rows:
             try:
