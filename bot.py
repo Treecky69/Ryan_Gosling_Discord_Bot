@@ -77,7 +77,7 @@ def run_discord_bot():
 
         #add get_all as a workaround of a bug from the module
         #if get_all not included, it will return only the first letter of the name
-        #with get_all=True it will return the whole word
+        #with get_all it will return the whole word
         emoji = discord_emoji.to_discord(reaction.emoji, get_all=True)
 
         cur.execute("select * from sound where emoji = ?", [emoji])
