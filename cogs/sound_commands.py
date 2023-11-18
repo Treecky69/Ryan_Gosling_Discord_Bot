@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 import sqlite3
+import discord_emoji
 
 database = "sounds.db"
 
@@ -21,13 +22,15 @@ class sound_commands(commands.Cog):
         text = "These are the sounds:\n"
         
         for row in rows:
-            text += f"- {row['emoji']}: {row['file']}\n"
+            emoji = discord_emoji.to_unicode(row['emoji'])
+            text += f"- {emoji}: {row['file']}\n"
 
         message = await ctx.send(text)
         
         for row in rows:
             try:
-                await message.add_reaction(row['emoji'])
+                emoji = discord_emoji.to_unicode(row['emoji'])
+                await message.add_reaction(emoji)
             except:
                 continue
 

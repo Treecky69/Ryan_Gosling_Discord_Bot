@@ -9,6 +9,7 @@ import subprocess
 import traceback
 import sqlite3
 from discord import FFmpegPCMAudio
+import discord_emoji
 
 #since with the line bot.start(token) errors are no longer outputed
 #i use this
@@ -74,7 +75,12 @@ def run_discord_bot():
         if reaction.message.author.id != bot_id:
             return
 
-        cur.execute("select * from sound where emoji = ?", [reaction.emoji])
+        #add get_all as a workaround of a bug from the module
+        #if get_all not included, it will return only the first letter of the name
+        #with get_all it will return the whole word
+        emoji = discord_emoji.to_discord(reaction.emoji, get_all=True)
+
+        cur.execute("select * from sound where emoji = ?", [emoji])
         row = cur.fetchone()
 
         file = soundFolder + row["file"]
