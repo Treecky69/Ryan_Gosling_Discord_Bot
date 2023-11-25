@@ -187,8 +187,13 @@ class save_commands(commands.Cog):
 
     #save all channels, not just current
     @save.command(brief = "used to archive all the channels", description = "Sends all the archive files in current channel")
-    async def all(self, ctx):
-        await self.save_func(ctx.channel.id, cloud = "no")
+    async def all(self, ctx, cloud: str = commands.parameter(default=None)):
+        if cloud == "cloud":
+            cloud = "yes"
+        else:
+            cloud = "no"
+
+        await self.save_func(ctx.channel.id, cloud = cloud)
 
     @save.command(brief = "Schedule a weekly save", description = "Format: +save week <weekday> <hour> <minute>")
     async def week(self, ctx, day: str = commands.parameter(default=None, description="week day (Monday - Sunday)"), hour: int = commands.parameter(default=12, description="Hour, this uses 24-hour format"), minute: int = 0, cloud: str = None):
