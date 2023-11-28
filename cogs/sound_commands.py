@@ -17,9 +17,9 @@ class sound_commands(commands.Cog):
 
     @commands.command(brief="Goofy sounds", description="A feature to play all your favorite sounds")
     async def sound(self, ctx: commands.Context):
-        cur.execute("select rowid, * from sound")
+        cur.execute("select * from sound")
         rows = cur.fetchall()
-        reaction_msg_limit = 20 #how many reactions per message are allowed
+        reactLimit = 4 #how many reactions per message are allowed
         cur.execute("select count(*) from sound")
         count = cur.fetchone()["count(*)"] #get the number of rows
 
@@ -28,17 +28,21 @@ class sound_commands(commands.Cog):
         text = "" #list of emoji filename pairs
         msg_array = [] #an array of messages (for overcoming disocrd's 20 reactions per message limit)
         
-        for row in rows:
+        for i in range(count):
+            row = rows[i]
+
             emoji = discord_emoji.to_unicode(row['emoji'])
             text += f"- {emoji}: {row['file']}\n"
             
-            if row["rowid"] % reaction_msg_limit == 0 or row["rowid"] == count:
+            if i % reactLimit == (reactLimit - 1) or i == count - 1:
                 msg_array.append(text)
                 text = ""
 
-        for row in rows:
-            if row["rowid"] % reaction_msg_limit == 1: #because rowid starts at one, this will activate even with the first loop
-                index = math.floor(row["rowid"] / reaction_msg_limit) #index will be the result of division
+        for i in range(count):
+            row = rows[i]
+
+            if i % reactLimit == 0:
+                index = int(i / reactLimit) #index will be the result of division
                 message = await ctx.send(msg_array[index]) 
 
             try:
