@@ -19,7 +19,7 @@ class sound_commands(commands.Cog):
     async def sound(self, ctx: commands.Context):
         cur.execute("select * from sound")
         rows = cur.fetchall()
-        reactLimit = 4 #how many reactions per message are allowed
+        reactLimit = 20 #how many reactions per message are allowed
         cur.execute("select count(*) from sound")
         count = cur.fetchone()["count(*)"] #get the number of rows
 
