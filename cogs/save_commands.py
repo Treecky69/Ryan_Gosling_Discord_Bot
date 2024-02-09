@@ -30,6 +30,9 @@ class save_commands(commands.Cog):
         cur.execute("Insert into times(type, day, hour, minute, channel, cloud) values(?, ?, ?, ?, ?, ?)", (time_type, day, hour, minute, channel, cloud))
         conn.commit()
 
+    #this was the save function with the infinite loop
+    #but I dont need it anymore
+    """
     async def run_times(self):
         while True:
             day_week = datetime.today().weekday() + 1
@@ -129,6 +132,7 @@ class save_commands(commands.Cog):
                     rem_hour -= 1
                 print(f"This is rem_min if day is false: {rem_hour}, {rem_min}")
                 await sleep(rem_hour * 3600 + rem_min * 60)
+    """
 
     #where the file(s) is/are generated
     async def save_func(self, channel_id, cloud, onlythis = False, tz_info = "CET", fancy_times = False):
@@ -195,6 +199,9 @@ class save_commands(commands.Cog):
 
         await self.save_func(ctx.channel.id, cloud = cloud)
 
+    #used for scheduling a save
+    #went along with the infinite loop
+    """
     @save.command(brief = "Schedule a weekly save", description = "Format: +save week <weekday> <hour> <minute>")
     async def week(self, ctx, day: str = commands.parameter(default=None, description="week day (Monday - Sunday)"), hour: int = commands.parameter(default=12, description="Hour, this uses 24-hour format"), minute: int = 0, cloud: str = None):
         weekday_list = {
@@ -309,6 +316,7 @@ class save_commands(commands.Cog):
         conn.commit()
 
         await ctx.send("Cloud status changed")
+    """
 
 
 async def setup(bot):

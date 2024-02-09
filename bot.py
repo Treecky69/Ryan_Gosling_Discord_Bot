@@ -126,7 +126,9 @@ def run_discord_bot():
         #if not running:
             #running = True
         await ctx.send(f"{bot.user} is now running")
-        await save.run_times()
+        
+        #old function for infinite loop for saving
+        #await save.run_times()
         #else:
         #    await ctx.send(f"A new instance was shutdown")
         #    quit()
