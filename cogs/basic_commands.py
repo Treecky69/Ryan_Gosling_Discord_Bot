@@ -24,42 +24,39 @@ class basic_commands(commands.Cog):
         await ctx.send(f"Hi there {ctx.author.mention}")
         await ctx.send(f"{giflist[rand]}")
     
-    #@commands.command(brief = "This is brief test")
-    #async def test(self, ctx, channel_name = None, server_name = None):
-        # channel_id = ctx.channel.id
-        # chnl = self.bot.get_channel(channel_id)
-        # #await ctx.send(ctx.channel.id)
-        # #await chnl.send("This is now the current channel")
-        # #await chnl.send(chnl.guild.name)
-        # message = ""
+    # @commands.command(brief = "This is brief test")
+    # async def test(self, ctx, channel_name = None, server_name = None):
+    #     await ctx.send("Counting your shit")
 
-        # # for channel in chnl.guild.text_channels:
-        # #     #if channel.name == "misc":
-        # #     channel_id = channel.id
-        # #     channel_name = channel.name
-        # #     #await ctx.send("Found it")
-        # #     await ctx.send(channel_name)
-        # #     await ctx.send(channel_id)
+    #     counter = 0 # overall sum
+    #     users = {} #each user number messages
+    #     channels = {} #each channel number messages
 
-        # for channel_id in channel_list:
-        #     channel = self.bot.get_channel(channel_id)
-        #     server_id = channel.guild.id
-        #     if server_id == ctx.guild.id:
-        #         add_on = f"\n{channel_id} {channel.name}"
-        #         message += add_on
+    #     for channel in ctx.guild.text_channels:
+    #         async for message in channel.history(limit=9999):
+    #             if message.author.name not in users.keys(): #if user not part of dictionary
+    #                 users[message.author.name] = 1
+    #             else:
+    #                 users[message.author.name] += 1
 
-        # with open("info.txt") as f:
-        #     lines = f.readlines()
+    #             #change this for channels
+    #             if channel.name not in channels.keys(): #if user not part of dictionary
+    #                 channels[channel.name] = 1
+    #             else:
+    #                 channels[channel.name] += 1
 
-        # for line in lines:
-        #     if "token =" in line:
-        #         var, token = line.split(" = ")
-        #         print(var)
-        #         token = token[:-1]
-        #         print(token)
-
-        #await ctx.send(message)
+    #             counter += 1
         
+    #     #for sorting dictionaries by values and then keys
+    #     #stole it from here: https://www.geeksforgeeks.org/python-sort-python-dictionaries-by-key-or-value/
+    #     users = sorted(users.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
+    #     channels = sorted(channels.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
+
+    #     for user in users:
+    #         await ctx.send(f"{user[0]}: {user[1]}")
+    #     for channel in channels:
+    #         await ctx.send(f"{channel[0]}: {channel[1]}")
+    #     await ctx.send(counter)
 
     @commands.command(brief = "Surprise ;)", description = "Enter the voice channel for a surpirse :)")
     async def surprise(self, ctx):
@@ -117,6 +114,53 @@ Profile pic by {user.mention}"""
         rand = random.randrange(0, len(answerList))
 
         await ctx.send(f"{answerList[rand]}")
+
+    @commands.command(brief="Count how many messages have been sent", description = "The total amount of messages sent, plus each user and channel")
+    async def count(self, ctx):
+        await ctx.send("Counting your shit")
+
+        message = ""
+
+        total = 0 # overall sum
+        users = {} #each user number messages
+        channels = {} #each channel number messages
+
+        for channel in ctx.guild.text_channels:
+            async for message in channel.history(limit=99999):
+                if message.author.name not in users.keys(): #if user not part of dictionary
+                    users[message.author.name] = 1
+                else:
+                    users[message.author.name] += 1
+
+                #change this for channels
+                if channel.name not in channels.keys(): #if user not part of dictionary
+                    channels[channel.name] = 1
+                else:
+                    channels[channel.name] += 1
+
+                total += 1
+        
+        #for sorting dictionaries by values and then keys
+        #stole it from here: https://www.geeksforgeeks.org/python-sort-python-dictionaries-by-key-or-value/
+        users = sorted(users.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
+        channels = sorted(channels.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
+
+
+        await ctx.send("Here are the results\n")
+        
+        message = "Users:\n" #message that will be sent for the users table
+        for user in users:
+            message += f"{user[0]}: {user[1]}\n"
+        
+        await ctx.send(message) #send users table
+
+        message = "Channels:\n" #message that will be sent for the channels table
+        for channel in channels:
+            message += f"{channel[0]}: {channel[1]}\n"
+        
+        await ctx.send(message) #send channels table
+
+        await ctx.send(f"Total: {total}")
 
 async def setup(bot):
     await bot.add_cog(basic_commands(bot))
