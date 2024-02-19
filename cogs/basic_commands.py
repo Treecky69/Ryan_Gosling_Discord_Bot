@@ -4,6 +4,7 @@ import random
 import yt_dlp
 from asyncio import sleep
 import aiohttp
+import datetime
 
 class basic_commands(commands.Cog):
     def __init__(self, bot):
@@ -145,7 +146,6 @@ Profile pic by {user.mention}"""
         users = sorted(users.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
         channels = sorted(channels.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
 
-
         await ctx.send("Here are the results\n")
         
         message = "Users:\n" #message that will be sent for the users table
@@ -161,6 +161,13 @@ Profile pic by {user.mention}"""
         await ctx.send(message) #send channels table
 
         await ctx.send(f"Total: {total}")
+
+        today = datetime.date.today() #date for today
+        creationDate = datetime.date(2022, 8, 18) #date when server was created
+        diff = (today - creationDate).days
+
+        average = round(total / diff, 2) #average number of messages per day
+        await ctx.send(f"Average: {average}")
 
 async def setup(bot):
     await bot.add_cog(basic_commands(bot))
