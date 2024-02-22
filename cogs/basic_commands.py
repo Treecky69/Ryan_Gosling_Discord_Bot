@@ -150,13 +150,13 @@ Profile pic by {user.mention}"""
         
         message = "Users:\n" #message that will be sent for the users table
         for user in users:
-            message += f"{user[0]}: {user[1]}\n"
+            message += f"- {user[0]}: {user[1]}\n"
         
         await ctx.send(message) #send users table
 
         message = "Channels:\n" #message that will be sent for the channels table
         for channel in channels:
-            message += f"{channel[0]}: {channel[1]}\n"
+            message += f"- {channel[0]}: {channel[1]}\n"
         
         await ctx.send(message) #send channels table
 
