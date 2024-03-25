@@ -27,37 +27,26 @@ class basic_commands(commands.Cog):
     
     # @commands.command(brief = "This is brief test")
     # async def test(self, ctx, channel_name = None, server_name = None):
-    #     await ctx.send("Counting your shit")
-
-    #     counter = 0 # overall sum
-    #     users = {} #each user number messages
-    #     channels = {} #each channel number messages
+    #     channel_list = []
+    #     thread_list = []
 
     #     for channel in ctx.guild.text_channels:
-    #         async for message in channel.history(limit=9999):
-    #             if message.author.name not in users.keys(): #if user not part of dictionary
-    #                 users[message.author.name] = 1
-    #             else:
-    #                 users[message.author.name] += 1
+    #         channel_list.append(channel)
+                
+    #         #channel.threads for active threads
+    #         #channel.archived_threads() for archived threads
 
-    #             #change this for channels
-    #             if channel.name not in channels.keys(): #if user not part of dictionary
-    #                 channels[channel.name] = 1
-    #             else:
-    #                 channels[channel.name] += 1
+    #         for thread in channel.threads:
+    #             channel_list.append(thread)
 
-    #             counter += 1
-        
-    #     #for sorting dictionaries by values and then keys
-    #     #stole it from here: https://www.geeksforgeeks.org/python-sort-python-dictionaries-by-key-or-value/
-    #     users = sorted(users.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
-    #     channels = sorted(channels.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
+    #         async for thread in channel.archived_threads():
+    #             channel_list.append(thread)
 
-    #     for user in users:
-    #         await ctx.send(f"{user[0]}: {user[1]}")
-    #     for channel in channels:
-    #         await ctx.send(f"{channel[0]}: {channel[1]}")
-    #     await ctx.send(counter)
+    #     for i in channel_list:
+    #         if type(i) == discord.threads.Thread:
+    #             await ctx.send(f"{i.parent}: {i.name}")
+    #         else:
+    #             await ctx.send(i)
 
     @commands.command(brief = "Surprise ;)", description = "Enter the voice channel for a surpirse :)")
     async def surprise(self, ctx):

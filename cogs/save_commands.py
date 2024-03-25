@@ -150,7 +150,15 @@ class save_commands(commands.Cog):
             channel_list.append(ctx)
         else:
             for channel in ctx.guild.text_channels:
-                channel_list.append(channel)    
+                channel_list.append(channel)
+
+                #for active threads
+                for thread in channel.threads:
+                    channel_list.append(thread)
+
+                #for archived threads
+                async for thread in channel.archived_threads():
+                    channel_list.append(thread)
 
         #generating chat
         for channel in channel_list:
@@ -166,7 +174,8 @@ class save_commands(commands.Cog):
 
             print(type(transcript))
             #array for the transcript file or for the dropbox func
-            temp_array = {"channel": channel.name, "transcript": transcript}
+            #included the replace function because of my logic with isalnum()
+            temp_array = {"channel": channel.name.replace(" ","-"), "transcript": transcript}
             filelist.append(temp_array)
             #await ctx.send(transcript)
 
